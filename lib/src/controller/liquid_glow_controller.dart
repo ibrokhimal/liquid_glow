@@ -63,6 +63,7 @@ class LiquidGlowController extends ChangeNotifier {
   /// widget coordinates normalized to 0..1. `null` means no override.
   Offset? get touchOverride => _touchOverride;
   set touchOverride(Offset? value) {
+    if (_touchOverride == value) return;
     _touchOverride = value;
     notifyListeners();
   }

@@ -1922,10 +1922,15 @@ vec4 colorAt(int index) {
 }
 
 vec4 rampColor(float t) {
+  // Impeller's SkSL backend rejects '%' on int (compile error); scaled is
+  // always in [0, count), so a single compare+subtract covers the one
+  // wrap case (lower == count - 1) without needing modulo.
   int count = int(clamp(uColorCount, 2.0, 4.0));
   float scaled = fract(clamp(t, 0.0, 1.0)) * float(count);
-  int lower = int(floor(scaled)) % count;
-  int upper = (lower + 1) % count;
+  int lower = int(floor(scaled));
+  lower = lower >= count ? lower - count : lower;
+  int upper = lower + 1;
+  upper = upper >= count ? upper - count : upper;
   float frac = fract(scaled);
   return mix(colorAt(lower), colorAt(upper), frac);
 }

@@ -21,3 +21,4 @@ dev_dependencies:
 flutter:
   shaders:
     - shaders/liquid_fluid.frag
+    - shaders/siri_edge.frag

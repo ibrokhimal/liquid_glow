@@ -8,4 +8,9 @@ void main() {
     final program = await ShaderWarmCache.load(ShaderWarmCache.liquidFluid);
     expect(program, isNotNull);
   });
+
+  test('siri_edge shader compiles and loads', () async {
+    final program = await ShaderWarmCache.load(ShaderWarmCache.siriEdge);
+    expect(program, isNotNull);
+  });
 }

@@ -33,7 +33,11 @@ class LiquidGlowPreset {
         noiseScale = 0.8;
 
   /// A user-defined preset. [colors] must have between 2 and 6 entries.
-  const LiquidGlowPreset.custom({
+  ///
+  /// Not a `const` constructor: Dart's constant evaluator cannot fold
+  /// `List.length`, so an assert on the list length is incompatible with
+  /// `const`. Construct with `LiquidGlowPreset.custom(...)` (no `const`).
+  LiquidGlowPreset.custom({
     required this.colors,
     required this.baseSpeed,
     required this.noiseScale,

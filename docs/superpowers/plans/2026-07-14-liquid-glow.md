@@ -475,6 +475,11 @@ void main() {
         )
         .then((_) => completed = true));
 
+    // A Ticker's very first delivered frame always reports elapsed ==
+    // Duration.zero (its start time baseline is set on that first frame,
+    // not at the start() call) — pump once with no duration to consume
+    // that baseline frame before asserting on elapsed-time math.
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
     expect(updates, isNotEmpty);
     expect(completed, isFalse);
@@ -883,6 +888,10 @@ void main() {
         )
         .then((_) => completed = true));
 
+    // A Ticker's very first delivered frame always reports elapsed ==
+    // Duration.zero (see Task 4's ColorMorph test) — pump once with no
+    // duration to consume that baseline frame first.
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
     expect(completed, isFalse);
 

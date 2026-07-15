@@ -3,7 +3,7 @@ description: >
   High-performance, shader-driven fluid glow backgrounds and an iOS
   18-style Siri screen-edge glow effect for Flutter, powered by Impeller
   fragment shaders.
-version: 0.1.0
+version: 0.2.0
 
 environment:
   sdk: '>=3.3.0 <4.0.0'

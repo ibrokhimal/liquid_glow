@@ -33,6 +33,26 @@ controller.bindIntensityStream(myAudioLevelStream, mapper: (db) => db / 100);
 Presets: `LiquidGlowPreset.aurora()`, `.lavaLamp()`, `.cyberpunk()`, or
 `.custom(colors: ..., baseSpeed: ..., noiseScale: ...)`.
 
+Two more presets render discrete merging shapes instead of a noise
+gradient:
+
+```dart
+LiquidGlowController(
+  preset: const LiquidGlowPreset.darkGlow(
+    backgroundColor: Color(0xFF0B0F1A),
+  ),
+);
+LiquidGlowController(preset: const LiquidGlowPreset.floatingShapes());
+```
+
+`darkGlow` floats 3 glowing orbs over a background color you choose.
+`floatingShapes` floats 5 shapes (triangles, rounded squares, circles)
+that merge into each other like liquid, over a solid white background.
+Both use the same `LiquidGlowController`/`LiquidGlow` API as every other
+preset — `speed`/`intensity` still apply, and both still respect
+`enableTouchReaction`'s absence of effect (touch reaction is only
+implemented for the noise-based presets).
+
 ## SiriGlowEdge
 
 ```dart

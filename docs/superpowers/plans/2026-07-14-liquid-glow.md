@@ -2304,7 +2304,11 @@ class SiriGlowEdge extends StatefulWidget {
 }
 
 class _SiriGlowEdgeState extends State<SiriGlowEdge>
-    with SingleTickerProviderStateMixin, GlowTickerMixin<SiriGlowEdge> {
+    // TickerProviderStateMixin (not SingleTickerProviderStateMixin): this
+    // State vends two concurrent tickers — one from GlowTickerMixin's own
+    // createTicker() call, one from the AnimationController below.
+    // SingleTickerProviderStateMixin asserts only one is ever active.
+    with TickerProviderStateMixin, GlowTickerMixin<SiriGlowEdge> {
   ui.FragmentProgram? _program;
   double _elapsedSeconds = 0;
   late AnimationController _transitionController;

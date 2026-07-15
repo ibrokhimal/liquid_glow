@@ -17,6 +17,7 @@ uniform vec4 uColor2;
 uniform vec4 uColor3;
 uniform vec4 uColor4;
 uniform vec4 uColor5;
+uniform float uNoiseScale;
 
 out vec4 fragColor;
 
@@ -90,12 +91,12 @@ void main() {
   // Domain warp: a lower-frequency noise field offsets the sampling
   // coordinate before the higher-frequency detail field is sampled.
   vec2 warp = vec2(
-    fbm(aspectUv * 1.5 + vec2(0.0, t)),
-    fbm(aspectUv * 1.5 + vec2(5.2, -t))
+    fbm(aspectUv * 1.5 * uNoiseScale + vec2(0.0, t)),
+    fbm(aspectUv * 1.5 * uNoiseScale + vec2(5.2, -t))
   );
   vec2 warped = aspectUv + warp * 0.5 * uIntensity;
 
-  float n = fbm(warped * 2.0 + t);
+  float n = fbm(warped * 2.0 * uNoiseScale + t);
   n = n * 0.5 + 0.5;
 
   // Touch reaction: a localized bump that decays with uTouch.w (age).

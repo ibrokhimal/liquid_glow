@@ -32,7 +32,7 @@ class LiquidGlowPainter extends CustomPainter {
       ..setFloat(i++, size.width)
       ..setFloat(i++, size.height)
       ..setFloat(i++, timeSeconds)
-      ..setFloat(i++, controller.speed)
+      ..setFloat(i++, controller.speed * controller.preset.baseSpeed)
       ..setFloat(i++, controller.intensity)
       ..setFloat(i++, origin.dx / size.width)
       ..setFloat(i++, origin.dy / size.height)
@@ -53,6 +53,8 @@ class LiquidGlowPainter extends CustomPainter {
         ..setFloat(i++, color.blue / 255)
         ..setFloat(i++, color.alpha / 255);
     }
+
+    shader.setFloat(i++, controller.preset.noiseScale);
 
     canvas.drawRect(Offset.zero & size, Paint()..shader = shader);
   }

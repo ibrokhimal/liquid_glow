@@ -34,6 +34,7 @@ class _LiquidGlowState extends State<LiquidGlow>
   Duration _lastRawElapsed = Duration.zero;
   int _lastResetToken = -1;
   TouchReactionState _touch = TouchReactionState.none();
+  Offset? _lastAppliedTouchOverride;
 
   @override
   RouteObserver<ModalRoute<void>>? get routeObserver => liquidGlowRouteObserver;
@@ -46,6 +47,7 @@ class _LiquidGlowState extends State<LiquidGlow>
     ShaderWarmCache.load(ShaderWarmCache.liquidFluid).then((program) {
       if (mounted) setState(() => _program = program);
     });
+    _applyTouchOverrideIfChanged();
   }
 
   @override
@@ -54,11 +56,23 @@ class _LiquidGlowState extends State<LiquidGlow>
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.removeListener(_onControllerChanged);
       widget.controller.addListener(_onControllerChanged);
+      _lastResetToken = widget.controller.resetToken;
+      _applyTouchOverrideIfChanged();
+    }
+  }
+
+  void _applyTouchOverrideIfChanged() {
+    final override = widget.controller.touchOverride;
+    if (override == _lastAppliedTouchOverride) return;
+    _lastAppliedTouchOverride = override;
+    if (override != null) {
+      _touch = TouchReactionState(position: override, strength: 1.0, age: 0);
     }
   }
 
   void _onControllerChanged() {
     if (!mounted) return;
+    _applyTouchOverrideIfChanged();
     if (widget.controller.resetToken != _lastResetToken) {
       _lastResetToken = widget.controller.resetToken;
       _resetBaseline = _lastRawElapsed;

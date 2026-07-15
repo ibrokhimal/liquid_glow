@@ -79,4 +79,19 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
     expect(_elapsedOf(tester), before);
   });
+
+  testWidgets('touchOverride is applied to the painter touch state',
+      (tester) async {
+    final controller = LiquidGlowController();
+    addTearDown(controller.dispose);
+    await _pumpApp(tester, controller);
+
+    controller.touchOverride = const Offset(0.3, 0.7);
+    await tester.pump();
+
+    final painter = tester.widget<CustomPaint>(_liquidGlowCustomPaint).painter
+        as LiquidGlowPainter;
+    expect(painter.touch.position, const Offset(0.3, 0.7));
+    expect(painter.touch.strength, 1.0);
+  });
 }

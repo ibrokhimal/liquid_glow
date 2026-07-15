@@ -25,6 +25,9 @@ class ColorMorph {
     required Curve curve,
   }) {
     _ticker?.dispose();
+    if (_completer != null && !_completer!.isCompleted) {
+      _completer!.complete();
+    }
     final matchedTo = _matchLength(from, to);
     final completer = Completer<void>();
     _completer = completer;
@@ -57,9 +60,13 @@ class ColorMorph {
     return List<Color>.generate(from.length, (i) => to[i % to.length]);
   }
 
-  /// Cancels any in-flight animation. Does not complete the pending Future.
+  /// Cancels any in-flight animation, completing any pending Future so
+  /// callers awaiting it don't hang.
   void dispose() {
     _ticker?.dispose();
+    if (_completer != null && !_completer!.isCompleted) {
+      _completer!.complete();
+    }
     _completer = null;
   }
 }

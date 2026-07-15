@@ -26,4 +26,28 @@ void main() {
       throwsA(isA<AssertionError>()),
     );
   });
+
+  test('darkGlow carries the given backgroundColor and darkOrbs kind', () {
+    const preset = LiquidGlowPreset.darkGlow(backgroundColor: Color(0xFF0B0F1A));
+    expect(preset.backgroundColor, const Color(0xFF0B0F1A));
+    expect(preset.kind, LiquidGlowPresetKind.darkOrbs);
+  });
+
+  test('floatingShapes has no backgroundColor and floatingShapes kind', () {
+    const preset = LiquidGlowPreset.floatingShapes();
+    expect(preset.backgroundColor, isNull);
+    expect(preset.kind, LiquidGlowPresetKind.floatingShapes);
+  });
+
+  test('noise-based presets default to kind noise with no backgroundColor',
+      () {
+    for (final preset in [
+      const LiquidGlowPreset.aurora(),
+      const LiquidGlowPreset.lavaLamp(),
+      const LiquidGlowPreset.cyberpunk(),
+    ]) {
+      expect(preset.kind, LiquidGlowPresetKind.noise);
+      expect(preset.backgroundColor, isNull);
+    }
+  });
 }

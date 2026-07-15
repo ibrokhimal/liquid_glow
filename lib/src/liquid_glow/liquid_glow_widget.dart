@@ -6,6 +6,10 @@ import '../controller/liquid_glow_controller.dart';
 import '../core/glow_ticker.dart';
 import '../core/shader_warm_cache.dart';
 import 'liquid_glow_painter.dart';
+import 'liquid_glow_preset.dart';
+import 'liquid_orbs_painter.dart';
+import 'liquid_shapes_painter.dart';
+import 'shape_motion.dart';
 import 'touch_reaction.dart';
 
 /// A GPU-shader-driven fluid glow background, driven by a
@@ -44,7 +48,8 @@ class _LiquidGlowState extends State<LiquidGlow>
     super.initState();
     widget.controller.addListener(_onControllerChanged);
     _lastResetToken = widget.controller.resetToken;
-    ShaderWarmCache.load(ShaderWarmCache.liquidFluid).then((program) {
+    ShaderWarmCache.load(_shaderAssetKeyFor(widget.controller.preset.kind))
+        .then((program) {
       if (mounted) setState(() => _program = program);
     });
     _applyTouchOverrideIfChanged();
@@ -99,6 +104,51 @@ class _LiquidGlowState extends State<LiquidGlow>
     setState(() {});
   }
 
+  String _shaderAssetKeyFor(LiquidGlowPresetKind kind) {
+    switch (kind) {
+      case LiquidGlowPresetKind.noise:
+        return ShaderWarmCache.liquidFluid;
+      case LiquidGlowPresetKind.darkOrbs:
+        return ShaderWarmCache.liquidOrbs;
+      case LiquidGlowPresetKind.floatingShapes:
+        return ShaderWarmCache.liquidShapes;
+    }
+  }
+
+  CustomPainter _buildPainter(ui.FragmentProgram program) {
+    switch (widget.controller.preset.kind) {
+      case LiquidGlowPresetKind.noise:
+        return LiquidGlowPainter(
+          program: program,
+          timeSeconds: _elapsedSeconds,
+          controller: widget.controller,
+          touch: _touch,
+        );
+      case LiquidGlowPresetKind.darkOrbs:
+        return LiquidOrbsPainter(
+          program: program,
+          timeSeconds: _elapsedSeconds,
+          controller: widget.controller,
+          orbPositions: [
+            for (final motion in LiquidOrbsPainter.motions)
+              computeShapePosition(
+                  motion, _elapsedSeconds, widget.controller.speed),
+          ],
+        );
+      case LiquidGlowPresetKind.floatingShapes:
+        return LiquidShapesPainter(
+          program: program,
+          timeSeconds: _elapsedSeconds,
+          controller: widget.controller,
+          shapePositions: [
+            for (final motion in LiquidShapesPainter.motions)
+              computeShapePosition(
+                  motion, _elapsedSeconds, widget.controller.speed),
+          ],
+        );
+    }
+  }
+
   void _handlePointer(Offset localPosition, Size size) {
     if (size.isEmpty) return;
     setState(() {
@@ -130,12 +180,7 @@ class _LiquidGlowState extends State<LiquidGlow>
               final size = constraints.biggest;
               return CustomPaint(
                 size: size,
-                painter: LiquidGlowPainter(
-                  program: program,
-                  timeSeconds: _elapsedSeconds,
-                  controller: widget.controller,
-                  touch: _touch,
-                ),
+                painter: _buildPainter(program),
               );
             },
           );

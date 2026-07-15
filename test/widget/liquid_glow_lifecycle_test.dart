@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:liquid_glow/liquid_glow.dart';
 import 'package:liquid_glow/src/core/shader_warm_cache.dart';
 import 'package:liquid_glow/src/liquid_glow/liquid_glow_painter.dart';
+import 'package:liquid_glow/src/liquid_glow/liquid_orbs_painter.dart';
+import 'package:liquid_glow/src/liquid_glow/liquid_shapes_painter.dart';
 
 // Scoped to descendants of LiquidGlow: MaterialApp's debug banner also
 // renders a CustomPaint (with a null `painter`, via `foregroundPainter`),
@@ -122,5 +124,68 @@ void main() {
     expect(painter.touch.strength, 1.0);
 
     await gesture.up();
+  });
+
+  testWidgets('darkGlow preset renders with LiquidOrbsPainter',
+      (tester) async {
+    final controller = LiquidGlowController(
+      preset: const LiquidGlowPreset.darkGlow(
+        backgroundColor: Color(0xFF0B0F1A),
+      ),
+    );
+    addTearDown(controller.dispose);
+    await _pumpApp(tester, controller);
+
+    expect(tester.takeException(), isNull);
+    final painter =
+        tester.widget<CustomPaint>(_liquidGlowCustomPaint).painter;
+    expect(painter, isA<LiquidOrbsPainter>());
+  });
+
+  testWidgets('floatingShapes preset renders with LiquidShapesPainter',
+      (tester) async {
+    final controller = LiquidGlowController(
+      preset: const LiquidGlowPreset.floatingShapes(),
+    );
+    addTearDown(controller.dispose);
+    await _pumpApp(tester, controller);
+
+    expect(tester.takeException(), isNull);
+    final painter =
+        tester.widget<CustomPaint>(_liquidGlowCustomPaint).painter;
+    expect(painter, isA<LiquidShapesPainter>());
+  });
+
+  testWidgets('darkGlow preset freezes time when reduce motion is on',
+      (tester) async {
+    final controller = LiquidGlowController(
+      preset: const LiquidGlowPreset.darkGlow(
+        backgroundColor: Color(0xFF0B0F1A),
+      ),
+    );
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child: MaterialApp(
+          navigatorObservers: [liquidGlowRouteObserver],
+          home: LiquidGlow(controller: controller),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    final before =
+        (tester.widget<CustomPaint>(_liquidGlowCustomPaint).painter
+                as LiquidOrbsPainter)
+            .timeSeconds;
+    await tester.pump(const Duration(milliseconds: 100));
+    final after =
+        (tester.widget<CustomPaint>(_liquidGlowCustomPaint).painter
+                as LiquidOrbsPainter)
+            .timeSeconds;
+    expect(after, before);
   });
 }

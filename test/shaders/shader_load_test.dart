@@ -18,4 +18,9 @@ void main() {
     final program = await ShaderWarmCache.load(ShaderWarmCache.liquidOrbs);
     expect(program, isNotNull);
   });
+
+  test('liquid_shapes shader compiles and loads', () async {
+    final program = await ShaderWarmCache.load(ShaderWarmCache.liquidShapes);
+    expect(program, isNotNull);
+  });
 }

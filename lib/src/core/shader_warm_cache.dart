@@ -20,6 +20,10 @@ class ShaderWarmCache {
   /// `pubspec.yaml` once `shaders/liquid_orbs.frag` exists).
   static const String liquidOrbs = 'shaders/liquid_orbs.frag';
 
+  /// Asset key for the LiquidGlow floating-shapes shader (registered in
+  /// `pubspec.yaml` once `shaders/liquid_shapes.frag` exists).
+  static const String liquidShapes = 'shaders/liquid_shapes.frag';
+
   /// Loads (and caches) the [ui.FragmentProgram] for [assetKey]. [loader]
   /// is injectable for tests; production callers omit it and get
   /// [ui.FragmentProgram.fromAsset].

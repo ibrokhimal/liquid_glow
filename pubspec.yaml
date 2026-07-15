@@ -23,3 +23,4 @@ flutter:
     - shaders/liquid_fluid.frag
     - shaders/siri_edge.frag
     - shaders/liquid_orbs.frag
+    - shaders/liquid_shapes.frag

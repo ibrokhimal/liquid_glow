@@ -24,8 +24,11 @@ class DemoPage extends StatefulWidget {
   State<DemoPage> createState() => _DemoPageState();
 }
 
+enum _BackgroundStyle { fluidGradient, darkGlow, floatingShapes }
+
 class _DemoPageState extends State<DemoPage> {
-  late final LiquidGlowController _controller;
+  late LiquidGlowController _controller;
+  _BackgroundStyle _backgroundStyle = _BackgroundStyle.fluidGradient;
   SiriGlowState _siriState = SiriGlowState.idle;
   GlowEdgeMask _mask = GlowEdgeMask.all;
   int _presetIndex = 0;
@@ -59,6 +62,26 @@ class _DemoPageState extends State<DemoPage> {
   void _selectPreset(int index) {
     setState(() => _presetIndex = index);
     _controller.animateToColors(_presets[index].colors);
+  }
+
+  void _selectBackgroundStyle(_BackgroundStyle style) {
+    if (style == _backgroundStyle) return;
+    final oldController = _controller;
+    setState(() {
+      _backgroundStyle = style;
+      _controller = switch (style) {
+        _BackgroundStyle.fluidGradient =>
+          LiquidGlowController(preset: _presets[_presetIndex]),
+        _BackgroundStyle.darkGlow => LiquidGlowController(
+            preset: const LiquidGlowPreset.darkGlow(
+              backgroundColor: Color(0xFF0B0F1A),
+            ),
+          ),
+        _BackgroundStyle.floatingShapes =>
+          LiquidGlowController(preset: const LiquidGlowPreset.floatingShapes()),
+      };
+    });
+    oldController.dispose();
   }
 
   void _morphColors() {
@@ -97,6 +120,23 @@ class _DemoPageState extends State<DemoPage> {
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 24),
+                  SegmentedButton<_BackgroundStyle>(
+                    segments: const [
+                      ButtonSegment(
+                        value: _BackgroundStyle.fluidGradient,
+                        label: Text('Fluid')),
+                      ButtonSegment(
+                        value: _BackgroundStyle.darkGlow,
+                        label: Text('Dark Glow')),
+                      ButtonSegment(
+                        value: _BackgroundStyle.floatingShapes,
+                        label: Text('Shapes')),
+                    ],
+                    selected: {_backgroundStyle},
+                    onSelectionChanged: (selection) =>
+                        _selectBackgroundStyle(selection.first),
+                  ),
+                  const SizedBox(height: 16),
                   SegmentedButton<int>(
                     segments: [
                       for (var i = 0; i < _presetLabels.length; i++)

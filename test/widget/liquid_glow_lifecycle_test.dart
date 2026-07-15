@@ -94,4 +94,33 @@ void main() {
     expect(painter.touch.position, const Offset(0.3, 0.7));
     expect(painter.touch.strength, 1.0);
   });
+
+  testWidgets(
+      'enableTouchReaction builds without error and a drag updates the '
+      'painter touch state', (tester) async {
+    final controller = LiquidGlowController();
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        navigatorObservers: [liquidGlowRouteObserver],
+        home: LiquidGlow(controller: controller, enableTouchReaction: true),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(_liquidGlowCustomPaint, findsOneWidget);
+
+    final gesture = await tester.startGesture(const Offset(200, 300));
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+
+    final painter = tester.widget<CustomPaint>(_liquidGlowCustomPaint).painter
+        as LiquidGlowPainter;
+    expect(painter.touch.strength, 1.0);
+
+    await gesture.up();
+  });
 }

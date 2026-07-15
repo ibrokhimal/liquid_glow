@@ -141,13 +141,19 @@ class _LiquidGlowState extends State<LiquidGlow>
           );
 
     if (widget.enableTouchReaction) {
+      // Capture the pre-reassignment value: a closure over the
+      // `painterWidget` variable itself (rather than this snapshot) would
+      // see the *reassigned* LayoutBuilder as its own child once the
+      // assignment below runs, since Dart closures capture variables, not
+      // values — producing a widget that is its own child (infinite tree).
+      final basePainterWidget = painterWidget;
       painterWidget = LayoutBuilder(
         builder: (context, constraints) => GestureDetector(
           onPanDown: (details) =>
               _handlePointer(details.localPosition, constraints.biggest),
           onPanUpdate: (details) =>
               _handlePointer(details.localPosition, constraints.biggest),
-          child: painterWidget,
+          child: basePainterWidget,
         ),
       );
     }

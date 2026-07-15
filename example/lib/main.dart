@@ -123,14 +123,14 @@ class _DemoPageState extends State<DemoPage> {
                   SegmentedButton<_BackgroundStyle>(
                     segments: const [
                       ButtonSegment(
-                        value: _BackgroundStyle.fluidGradient,
-                        label: Text('Fluid')),
+                          value: _BackgroundStyle.fluidGradient,
+                          label: Text('Fluid')),
                       ButtonSegment(
-                        value: _BackgroundStyle.darkGlow,
-                        label: Text('Dark Glow')),
+                          value: _BackgroundStyle.darkGlow,
+                          label: Text('Dark Glow')),
                       ButtonSegment(
-                        value: _BackgroundStyle.floatingShapes,
-                        label: Text('Shapes')),
+                          value: _BackgroundStyle.floatingShapes,
+                          label: Text('Shapes')),
                     ],
                     selected: {_backgroundStyle},
                     onSelectionChanged: (selection) =>

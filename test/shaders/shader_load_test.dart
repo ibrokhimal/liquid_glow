@@ -13,4 +13,9 @@ void main() {
     final program = await ShaderWarmCache.load(ShaderWarmCache.siriEdge);
     expect(program, isNotNull);
   });
+
+  test('liquid_orbs shader compiles and loads', () async {
+    final program = await ShaderWarmCache.load(ShaderWarmCache.liquidOrbs);
+    expect(program, isNotNull);
+  });
 }

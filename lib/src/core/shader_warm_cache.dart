@@ -16,6 +16,10 @@ class ShaderWarmCache {
   /// once `shaders/siri_edge.frag` exists).
   static const String siriEdge = 'shaders/siri_edge.frag';
 
+  /// Asset key for the LiquidGlow dark-orbs shader (registered in
+  /// `pubspec.yaml` once `shaders/liquid_orbs.frag` exists).
+  static const String liquidOrbs = 'shaders/liquid_orbs.frag';
+
   /// Loads (and caches) the [ui.FragmentProgram] for [assetKey]. [loader]
   /// is injectable for tests; production callers omit it and get
   /// [ui.FragmentProgram.fromAsset].

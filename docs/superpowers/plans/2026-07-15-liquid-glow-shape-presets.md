@@ -331,7 +331,14 @@ class LiquidGlowPreset {
         kind = LiquidGlowPresetKind.noise;
 
   /// A user-defined preset. [colors] must have between 2 and 6 entries.
-  const LiquidGlowPreset.custom({
+  ///
+  /// Not `const`: `List.length` cannot be accessed in a constant
+  /// expression in Dart, so a `const` constructor here would fail to
+  /// compile at any `const LiquidGlowPreset.custom(...)` call site
+  /// (verified: `const_eval_property_access`). This was already fixed
+  /// once (commit `0c06350`) after live testing surfaced it; retained
+  /// here as a non-const constructor for the same reason.
+  LiquidGlowPreset.custom({
     required this.colors,
     required this.baseSpeed,
     required this.noiseScale,

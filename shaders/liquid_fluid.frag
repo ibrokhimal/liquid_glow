@@ -107,9 +107,16 @@ void main() {
   n += touchBump;
 
   // Bias the sample toward uOrigin so the animation appears to radiate
-  // from the configured origin/alignment point.
+  // from the configured origin/alignment point. This necessarily creates
+  // a fixed point in space (uOrigin doesn't move), so any multiplicative
+  // dimming here reads as a static hotspot against the otherwise
+  // constantly-shifting noise field, no matter how small the coefficient
+  // — visually confirmed a fixed-position bright spot survives even at
+  // 0.04. Kept minimal (0.015) to stay near the threshold of visibility;
+  // clamped so distant origins (e.g. a corner alignment) can't push the
+  // multiplier negative.
   float originDist = distance(uv, uOrigin);
-  n = mix(n, n * (1.0 - originDist), 0.3);
+  n = mix(n, n * clamp(1.0 - originDist, 0.0, 1.0), 0.015);
 
   fragColor = rampColor(n);
 }

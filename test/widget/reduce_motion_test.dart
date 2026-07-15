@@ -43,4 +43,34 @@ void main() {
         as LiquidGlowPainter;
     expect(after.timeSeconds, before);
   });
+
+  testWidgets(
+      'SiriGlowEdge jumps to the target state instantly under reduce motion',
+      (tester) async {
+    final key = GlobalKey();
+    Widget buildApp(SiriGlowState state) => MediaQuery(
+          data: const MediaQueryData(disableAnimations: true),
+          child: MaterialApp(
+            navigatorObservers: [liquidGlowRouteObserver],
+            home: SiriGlowEdge(
+              key: key,
+              state: state,
+              transitionDuration: const Duration(seconds: 5),
+            ),
+          ),
+        );
+
+    await tester.pumpWidget(buildApp(SiriGlowState.idle));
+    await tester.pump();
+    await tester.pump();
+
+    await tester.pumpWidget(buildApp(SiriGlowState.speaking));
+    // A single pump (no elapsed time) is enough: under reduce motion the
+    // widget should already be at the target state, not part-way through
+    // a 5-second cross-fade.
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(CustomPaint), findsWidgets);
+  });
 }

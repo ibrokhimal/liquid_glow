@@ -7,3 +7,6 @@ export 'src/core/glow_ticker.dart' show liquidGlowRouteObserver;
 export 'src/liquid_glow/liquid_glow_preset.dart';
 export 'src/liquid_glow/liquid_glow_widget.dart';
 export 'src/liquid_glow/touch_reaction.dart';
+export 'src/siri_glow/glow_edge_mask.dart';
+export 'src/siri_glow/siri_glow_edge.dart';
+export 'src/siri_glow/siri_glow_state.dart';

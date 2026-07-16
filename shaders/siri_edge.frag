@@ -79,7 +79,12 @@ void main() {
       left   * uEdgeMask.w;
   maskAlpha = clamp(maskAlpha, 0.0, 1.0);
 
-  float wavePhase = atan(p.y, p.x) * (2.0 + uWave * 4.0) - uTime * uSpeed * 1.5;
+  // atan(p.y, p.x) has its branch cut on the negative x-axis (left-middle of
+  // the rect), jumping from +pi to -pi there. sin(k * angle) only matches up
+  // across that jump when k is a whole number of cycles, so the frequency is
+  // rounded to the nearest integer to keep the traveling wave seamless.
+  float waveFreq = floor(2.0 + uWave * 4.0 + 0.5);
+  float wavePhase = atan(p.y, p.x) * waveFreq - uTime * uSpeed * 1.5;
   float wave = 0.75 + 0.25 * sin(wavePhase);
 
   float colorPhase = fract(uTime * uColorCycle * 0.1 +

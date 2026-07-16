@@ -65,7 +65,7 @@ void main() {
   vec2 p4 = vec2(uShapePos4.x * aspect, uShapePos4.y);
 
   float size = uShapeSize * clamp(uIntensity, 0.3, 2.0);
-  float blend = 0.05 + 0.03 * clamp(uIntensity, 0.0, 2.0);
+  float blend = 0.02 + 0.012 * clamp(uIntensity, 0.0, 2.0);
 
   float d0 = sdEquilateralTriangle(aspectUv, p0, size);
   float d1 = sdRoundBox(aspectUv, p1, vec2(size), size * 0.3);
@@ -86,9 +86,13 @@ void main() {
   if (d3 < nearest) { nearest = d3; color = colorForIndex(3); }
   if (d4 < nearest) { nearest = d4; color = colorForIndex(4); }
 
+  // Narrower outer falloff than `blend * 2.0` (see liquid_orbs.frag for
+  // the same fix, applied there after live-device testing showed the
+  // wider falloff washing shapes into near-full-screen coverage).
+  float glowWidth = 0.016 + 0.006 * clamp(uIntensity, 0.0, 2.0);
   float shimmer = 0.95 + 0.05 * sin(uTime * uSpeed * 1.5);
   float alpha = clamp(
-    (1.0 - smoothstep(-blend, blend * 2.0, merged)) * 0.55 * shimmer,
+    (1.0 - smoothstep(-blend, glowWidth, merged)) * 0.85 * shimmer,
     0.0, 1.0);
 
   vec4 background = vec4(1.0, 1.0, 1.0, 1.0);

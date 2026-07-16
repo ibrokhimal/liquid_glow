@@ -58,9 +58,15 @@ void main() {
     orbColor = uOrbColor0;
   }
 
+  // The glow's outer falloff is deliberately much narrower than the
+  // merge blend radius above: `blend * 3.0` here (visually verified on
+  // device) let each orb's halo extend to roughly half the screen,
+  // washing three orbs into near-full-screen coverage instead of
+  // distinct blobs on a visibly dark background.
+  float glowWidth = 0.05 + 0.02 * clamp(uIntensity, 0.0, 2.0);
   float shimmer = 0.9 + 0.1 * sin(uTime * uSpeed * 2.0);
   float glow = clamp(
-    (1.0 - smoothstep(-blend, blend * 3.0, merged)) * shimmer, 0.0, 1.0);
+    (1.0 - smoothstep(-blend, glowWidth, merged)) * shimmer, 0.0, 1.0);
 
   fragColor = mix(uBackgroundColor, orbColor, glow);
 }

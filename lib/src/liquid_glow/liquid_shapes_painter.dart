@@ -26,7 +26,12 @@ class LiquidShapesPainter extends CustomPainter {
   static const Color _shapeColor0 = Color(0xFFFFADAD); // triangle
   static const Color _shapeColor1 = Color(0xFFA0E7E5); // roundedSquare
   static const Color _shapeColor2 = Color(0xFFFFD6A5); // circle
-  static const double _shapeSize = 0.14;
+  // Visually verified on-device: at 0.14 (comparable to LiquidOrbsPainter's
+  // 0.16 orb radius, appropriate for only 3 orbs), 5 shapes packed into the
+  // unit square overlapped so heavily they merged into near-full-screen
+  // coverage instead of distinct blobs. 0.055 leaves visible gaps between
+  // the 5 shapes' default motion centers.
+  static const double _shapeSize = 0.055;
 
   /// Fixed per-shape motion config, cycling motion kinds
   /// [orbital, bounce, travel, orbital, bounce] with distinct

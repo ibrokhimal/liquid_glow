@@ -4,6 +4,10 @@ High-performance, shader-driven fluid glow backgrounds and an iOS
 18-style Siri screen-edge glow effect for Flutter, powered by Impeller
 fragment shaders. Targets iOS and Android.
 
+| Aurora glow | Siri edge glow |
+| --- | --- |
+| ![Aurora glow](screenshots/aurora_glow.png) | ![Siri edge glow](screenshots/siri_edge_glow.png) |
+
 ## LiquidGlow
 
 ```dart

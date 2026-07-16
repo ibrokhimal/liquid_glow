@@ -7,6 +7,12 @@ version: 0.2.0
 homepage: https://github.com/ibrokhimal/liquid_glow
 repository: https://github.com/ibrokhimal/liquid_glow
 
+screenshots:
+  - description: 'LiquidGlowPreset.aurora() fluid shader background.'
+    path: screenshots/aurora_glow.png
+  - description: 'SiriGlowEdge iOS 18-style screen-edge glow.'
+    path: screenshots/siri_edge_glow.png
+
 environment:
   sdk: '>=3.3.0 <4.0.0'
   flutter: '>=3.19.0'

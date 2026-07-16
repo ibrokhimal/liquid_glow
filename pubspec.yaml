@@ -4,6 +4,8 @@ description: >
   18-style Siri screen-edge glow effect for Flutter, powered by Impeller
   fragment shaders.
 version: 0.2.0
+homepage: https://github.com/ibrokhimal/liquid_glow
+repository: https://github.com/ibrokhimal/liquid_glow
 
 environment:
   sdk: '>=3.3.0 <4.0.0'

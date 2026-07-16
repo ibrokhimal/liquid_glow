@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/rendering.dart';
 
 import '../controller/liquid_glow_controller.dart';
@@ -89,7 +90,7 @@ class LiquidShapesPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant LiquidShapesPainter oldDelegate) {
     return oldDelegate.timeSeconds != timeSeconds ||
-        oldDelegate.shapePositions != shapePositions ||
+        !listEquals(oldDelegate.shapePositions, shapePositions) ||
         oldDelegate.controller != controller;
   }
 }

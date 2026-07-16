@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/rendering.dart';
 
 import '../controller/liquid_glow_controller.dart';
@@ -81,7 +82,7 @@ class LiquidOrbsPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant LiquidOrbsPainter oldDelegate) {
     return oldDelegate.timeSeconds != timeSeconds ||
-        oldDelegate.orbPositions != orbPositions ||
+        !listEquals(oldDelegate.orbPositions, orbPositions) ||
         oldDelegate.controller != controller;
   }
 }
